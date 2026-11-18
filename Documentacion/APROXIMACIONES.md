@@ -1,13 +1,14 @@
-# Detalles para revisar juntos
+# Medidas y aproximaciones v02
 
-- La distribución y los nombres proceden del mapa, pero no equivalen a un relevamiento arquitectónico.
-- Paredes: 3 m; grosor visual 18 cm. No hay datos verificados sobre alturas y acabados reales.
-- Puertas: aberturas simplificadas de 1.56 m en los puntos del grafo, sin hojas animadas. Accesos exteriores usan el ancho de la fuente cuando está disponible.
-- Mobiliario representativo: hasta seis pupitres por aula, doce asientos en Aula Magna, dos mesas por laboratorio y un escritorio por oficina. Se omiten piezas que no caben o quedan cerca de la entrada.
-- Laboratorios sin maquinaria real; no se presupone el equipamiento especializado de cada carrera.
-- Árboles, bancos y canchas: posiciones del mapa, modelos genéricos. Seis vehículos decorativos; su ubicación no representa vehículos reales.
-- Escaleras a P1/SS con límite señalizado; ascensores sin funcionamiento. Solo PB es recorrible.
-- Desniveles: cotas de la fuente convertidas a metros; colisión suavizada debajo de peldaños para permitir caminar.
-- Techos simples visibles en recorrido; la vista general los oculta. Sin ventanas detalladas, personas, tráfico ni decoración adicional.
+- Distribución, nombres e identificadores: copia local de Mapear UTN FRT, sin modificaciones a los polígonos de salas.
+- Escala conservada: 109 / 872,8 metros por unidad del mapa.
+- Paredes: 4 m de alto incluyendo cornisa, 18 cm de espesor; piezas de longitud máxima 4 m. Son valores de diseño solicitados, no alturas relevadas.
+- Puertas: 2 m libres desde el piso local; ancho inicial 1,56 m salvo accesos exteriores con medidas de la fuente. Sin hojas animadas.
+- Ala vieja: aulas 112, 114, 115, 116, 117, 118, 119 y 121. Ala nueva: laboratorios 151 a 159. Orientación mirando hacia adentro desde Rivadavia.
+- Los laboratorios de Física y del extremo norte se conservan en Laboratorios restantes, sin confundir categoría con ubicación.
+- Cafetería corresponde al comedor mencionado por el usuario.
+- Los anchos de circulación se miden en puntos representativos y cambios de sección; no constituyen una certificación de accesibilidad ni un relevamiento exhaustivo del edificio.
+- Se mantienen las cotas, rampas, mobiliario reducido y exteriores de v01. Equipamiento de laboratorio esquemático; pisos superiores fuera del alcance.
+- Las paredes compartidas tienen un único propietario en la jerarquía: editar un ala puede afectar el límite de un recinto vecino. Conservar los sectores juntos al reutilizar los prefabs.
 
-Para una siguiente revisión conviene confirmar: alturas de muros, tipo de pupitre, ubicación de pizarras, equipamiento de laboratorios y apariencia del acceso Rivadavia.
+Consultar REVISION-V02.md y rutas-v02.txt para resultados de esta versión. Documentacion/Anterior conserva los informes históricos, que no acreditan pruebas de v02.

@@ -7,6 +7,8 @@ namespace UtnMap {
   public Camera viewCamera;
   public CharacterController walker;
   public GameObject roofs;
+  public GameObject[] sectorRoofs=new GameObject[0];
+  void SetRoofs(bool visible){if(roofs)roofs.SetActive(visible);foreach(var roof in sectorRoofs)if(roof)roof.SetActive(visible);}
   public Vector3 entrance;
   public RoomInfo[] rooms;
   public bool walking;
@@ -17,8 +19,8 @@ namespace UtnMap {
   GUIStyle title,body,small,button,panel,roomButton;
   Texture2D background,accent; Rect header,pane; int frames;
   void Start(){ Application.targetFrameRate=60; rooms=rooms.OrderBy(r=>r.displayName).ToArray(); ToMap(); if(Application.platform!=RuntimePlatform.WebGLPlayer && Environment.GetCommandLineArgs().Contains("-utnSmoke")) StartCoroutine(Smoke()); }
-  public void ToMap(){viewCamera.nearClipPlane=1.5f;walking=false;walker.enabled=false;roofs.SetActive(false);Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
-  public void Walk(){viewCamera.nearClipPlane=.07f;walking=true;showList=false;walker.enabled=false;walker.transform.position=entrance+Vector3.up*.08f;walker.enabled=true;lookYaw=0;lookPitch=0;vertical=0;roofs.SetActive(true);if(Application.platform!=RuntimePlatform.WebGLPlayer){Cursor.lockState=CursorLockMode.Locked;Cursor.visible=false;}else{Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}}
+  public void ToMap(){viewCamera.nearClipPlane=1.5f;walking=false;walker.enabled=false;SetRoofs(false);Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
+  public void Walk(){viewCamera.nearClipPlane=.07f;walking=true;showList=false;walker.enabled=false;walker.transform.position=entrance+Vector3.up*.08f;walker.enabled=true;lookYaw=0;lookPitch=0;vertical=0;SetRoofs(true);if(Application.platform!=RuntimePlatform.WebGLPlayer){Cursor.lockState=CursorLockMode.Locked;Cursor.visible=false;}else{Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}}
   void Update(){
    frames++; bool typing=GUI.GetNameOfFocusedControl()=="RoomSearch";
    if(Input.GetKeyDown(KeyCode.Escape)){Cursor.lockState=CursorLockMode.None;Cursor.visible=true;}
@@ -54,6 +56,6 @@ namespace UtnMap {
    header=new Rect(header.x*scale,header.y*scale,header.width*scale,header.height*scale);pane=new Rect(pane.x*scale,pane.y*scale,pane.width*scale,pane.height*scale);
   }
   public static string Category(string c){switch(c){case "classroom":return "Aula";case "lab":return "Laboratorio";case "office":return "Oficina";case "outdoor":return "Exterior";default:return "Servicio";}}
-  IEnumerator Smoke(){yield return new WaitForSeconds(3);var args=Environment.GetCommandLineArgs();var ci=Array.IndexOf(args,"-utnCapture");var captures=ci>=0&&ci+1<args.Length?args[ci+1]:Application.persistentDataPath;System.IO.Directory.CreateDirectory(captures);ScreenCapture.CaptureScreenshot(captures+"/runtime-mapa.png");yield return new WaitForSeconds(1);Walk();yield return new WaitForSeconds(2);ScreenCapture.CaptureScreenshot(captures+"/runtime-entrada.png");var start=walker.transform.position;for(int i=0;i<120;i++){walker.Move(Vector3.forward*.025f);yield return null;}Debug.Log("UTN_SMOKE walking distance="+Vector3.Distance(start,walker.transform.position)+" rooms="+rooms.Length);ToMap();yield return new WaitForSeconds(1);Application.Quit();}
+  IEnumerator Smoke(){yield return new WaitForSeconds(3);var args=Environment.GetCommandLineArgs();var ci=Array.IndexOf(args,"-utnCapture");var captures=ci>=0&&ci+1<args.Length?args[ci+1]:Application.persistentDataPath;System.IO.Directory.CreateDirectory(captures);ScreenCapture.CaptureScreenshot(captures+"/runtime-mapa.png");yield return new WaitForSeconds(1);Walk();yield return new WaitForSeconds(2);ScreenCapture.CaptureScreenshot(captures+"/runtime-entrada.png");Debug.Log("UTN_ROOFS_WALK="+sectorRoofs.All(r=>r.activeSelf));var start=walker.transform.position;for(int i=0;i<120;i++){walker.Move(Vector3.forward*.025f);yield return null;}Debug.Log("UTN_SMOKE walking distance="+Vector3.Distance(start,walker.transform.position)+" rooms="+rooms.Length);ToMap();Debug.Log("UTN_ROOFS_MAP_HIDDEN="+sectorRoofs.All(r=>!r.activeSelf));yield return new WaitForSeconds(1);Application.Quit();}
  }
 }

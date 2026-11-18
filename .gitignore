@@ -28,3 +28,8 @@ crashlytics-build.properties
 
 # macOS
 .DS_Store
+
+# Registros locales y archivos de IDE adicionales
+*.log
+*.log.*
+*.slnx
