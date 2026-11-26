@@ -3,58 +3,30 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMovimiento : MonoBehaviour
 {
-    [SerializeField] private bool UsarGetAxisRaw;
     [SerializeField] private Transform camara;
-    [SerializeField] private Animator animator;
-    [SerializeField] private float velocidadMovimiento = 5f;
-    [SerializeField] private float velocidadRotacion = 12f;
+    [SerializeField] private float velocidad = 5f;
     [SerializeField] private float gravedad = -20f;
 
-    private CharacterController controlador;
-    private float velocidadVertical;
+    private CharacterController cc;
+    private float velY;
 
-    void Awake()
-    {
-        controlador = GetComponent<CharacterController>();
-        if (animator == null) animator = GetComponentInChildren<Animator>();
-        if (camara == null && Camera.main != null) camara = Camera.main.transform;
-    }
+    void Awake() => cc = GetComponent<CharacterController>();
 
     void Update()
     {
-        float ejeH = UsarGetAxisRaw ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
-        float ejeV = UsarGetAxisRaw ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
+        float x = Input.GetAxisRaw("Horizontal"); // A/D (strafe)
+        float z = Input.GetAxisRaw("Vertical");   // W/S
 
-        Vector3 adelante = camara.forward;
-        Vector3 derecha = camara.right;
-        adelante.y = 0f;
-        derecha.y = 0f;
-        adelante.Normalize();
-        derecha.Normalize();
+        // El personaje siempre mira hacia donde mira la cámara
+        transform.rotation = Quaternion.Euler(0f, camara.eulerAngles.y, 0f);
 
-        Vector3 direccion = derecha * ejeH + adelante * ejeV;
-        float intensidad = Mathf.Clamp01(direccion.magnitude);
+        // Movimiento relativo al personaje (que ya está alineado con la cámara)
+        Vector3 dir = (transform.forward * z + transform.right * x).normalized;
 
-        if (direccion.sqrMagnitude > 0.0001f)
-        {
-            direccion.Normalize();
-            // El personaje gira hacia donde camina
-            Quaternion destino = Quaternion.LookRotation(direccion);
-            transform.rotation = Quaternion.Slerp(transform.rotation, destino, velocidadRotacion * Time.deltaTime);
-        }
+        velY = cc.isGrounded ? -2f : velY + gravedad * Time.deltaTime;
 
-        // Gravedad
-        if (controlador.isGrounded && velocidadVertical < 0f) velocidadVertical = -2f;
-        velocidadVertical += gravedad * Time.deltaTime;
-
-        Vector3 movimiento = direccion * (velocidadMovimiento * intensidad);
-        movimiento.y = velocidadVertical;
-        controlador.Move(movimiento * Time.deltaTime);
-
-        // Animación
-        if (animator != null)
-        {
-            animator.SetFloat("Velocidad", intensidad, 0.1f, Time.deltaTime);
-        }
+        Vector3 mov = dir * velocidad;
+        mov.y = velY;
+        cc.Move(mov * Time.deltaTime);
     }
 }
