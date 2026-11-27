@@ -7,15 +7,20 @@ public class CharacterMovimiento : MonoBehaviour
     [SerializeField] private float velocidad = 5f;
     [SerializeField] private float gravedad = -20f;
 
-    private CharacterController cc;
+    [SerializeField] private float rotationSpeed = 250;
+
+    public Animator animation;
+    float x, z;
+
+    public CharacterController cc;
     private float velY;
 
     void Awake() => cc = GetComponent<CharacterController>();
 
     void Update()
     {
-        float x = Input.GetAxisRaw("Horizontal"); // A/D (strafe)
-        float z = Input.GetAxisRaw("Vertical");   // W/S
+         x = Input.GetAxisRaw("Horizontal"); // A/D (strafe)
+         z = Input.GetAxisRaw("Vertical");   // W/S
 
         // El personaje siempre mira hacia donde mira la cámara
         transform.rotation = Quaternion.Euler(0f, camara.eulerAngles.y, 0f);
@@ -28,5 +33,8 @@ public class CharacterMovimiento : MonoBehaviour
         Vector3 mov = dir * velocidad;
         mov.y = velY;
         cc.Move(mov * Time.deltaTime);
+
+        animation.SetFloat("velX",x);
+        animation.SetFloat("velZ",z);
     }
 }
